@@ -57,6 +57,11 @@ export class LivroService {
             throw new Error("Livro informado não existe.");
         }
 
+        const emprestimoLivroExiste: EmprestimoEntity[] = await this.emprestimoRepository.filterEmprestimosPorLivro(id);
+        if (emprestimoLivroExiste.length > 0) {
+            throw new Error("Não foi possivel deletar o livro, pois existe um emprestimo vinculado a ele.");
+        }
+
         await this.livroRepository.deleteLivro(livro.id);
         console.log("Service - Delete Categoria", livro.id);
         return livro;
